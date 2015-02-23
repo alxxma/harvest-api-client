@@ -17,15 +17,15 @@ class HarvestConnectionError(HarvestError):
 
 instance_classes = []
 class HarvestItemGetterable(type):
-    def __init__( klass, name, bases, attrs ):
-        super(HarvestItemGetterable,klass).__init__(name,bases,attrs)
-        instance_classes.append( klass )
+    def __init__(klass, name, bases, attrs):
+        super(HarvestItemGetterable, klass).__init__(name, bases, attrs)
+        instance_classes.append(klass)
 
 
 class HarvestItemBase(object):
-    def __init__( self, harvest, data ):
+    def __init__(self, harvest, data):
         self.harvest = harvest
-        for key,value in data.items():
+        for key, value in data.items():
             key = key.replace('-', '_').replace(' ', '_')
             try:
                 setattr(self, key, value)
@@ -44,7 +44,7 @@ class User(HarvestItemBase):
         return 'User: {} {}'.format(self.first_name, self.last_name)
 
     def entries(self,start,end):
-        return self.harvest._time_entries( '%s/%d/' % (self.base_url, self.id), start, end )
+        return self.harvest._time_entries('{}/{}/'.format(self.base_url, self.id), start, end)
 
 
 class Project(HarvestItemBase):
@@ -57,24 +57,24 @@ class Project(HarvestItemBase):
     def __str__(self):
         return 'Project: ' + self.name
 
-    def entries(self,start,end):
-        return self.harvest._time_entries( '%s/%d/' % (self.base_url, self.id), start, end )
+    def entries(self, start, end):
+        return self.harvest._time_entries('{}/{}/'.format(self.base_url, self.id), start, end)
 
     @property
     def client(self):
-        return self.harvest.client( self.client_id )
+        return self.harvest.client(self.client_id)
 
     @property
     def task_assignments(self):
-        url = '%s/%d/task_assignments' % (self.base_url, self.id)
-        for element in self.harvest._get_element_values( url, 'task-assignment' ):
-            yield TaskAssignment( self.harvest, element )
+        url = '{}/{}/task_assignments'.format(self.base_url, self.id)
+        for element in self.harvest._get_element_values(url, 'task-assignment'):
+            yield TaskAssignment(self.harvest, element)
 
     @property
     def user_assignments(self):
-        url = '%s/%d/user_assignments' % (self.base_url, self.id)
-        for element in self.harvest._get_element_values( url, 'user-assignment' ):
-            yield UserAssignment( self.harvest, element )
+        url = '{}/{}/user_assignments'.format(self.base_url, self.id)
+        for element in self.harvest._get_element_values(url, 'user-assignment'):
+            yield UserAssignment(self.harvest, element)
 
 
 class Client(HarvestItemBase):
@@ -86,14 +86,14 @@ class Client(HarvestItemBase):
 
     @property
     def contacts(self):
-        url = '%s/%d/contacts' % (self.base_url, self.id)
-        for element in self.harvest._get_element_values( url, 'contact' ):
-            yield Contact( self.harvest, element )
+        url = '{}/{}/contacts'.format(self.base_url, self.id)
+        for element in self.harvest._get_element_values(url, 'contact'):
+            yield Contact(self.harvest, element)
 
     def invoices(self):
-        url = '%s?client=%s' % (Invoice.base_url, self.id)
-        for element in self.harvest._get_element_values( url, Invoice.element_name ):
-            yield Invoice( self.harvest, element )
+        url = '{}?client={}'.format(Invoice.base_url, self.id)
+        for element in self.harvest._get_element_values(url, Invoice.element_name):
+            yield Invoice(self.harvest, element)
 
     def __str__(self):
         return 'Client: ' + self.name
@@ -107,7 +107,7 @@ class Contact(HarvestItemBase):
     plural_name = 'contacts'
 
     def __str__(self):
-        return 'Contact: %s %s' % (self.first_name, self.last_name)
+        return 'Contact: {} {}'.format(self.first_name, self.last_name)
 
 
 class Task(HarvestItemBase):
@@ -122,15 +122,15 @@ class Task(HarvestItemBase):
 
 class UserAssignment(HarvestItemBase):
     def __str__(self):
-        return 'user %d for project %d' % (self.user_id, self.project_id)
+        return 'user {} for project {}'.format(self.user_id, self.project_id)
 
     @property
     def project(self):
-        return self.harvest.project( self.project_id )
+        return self.harvest.project(self.project_id)
 
     @property
     def user(self):
-        return self.harvest.user( self.user_id )
+        return self.harvest.user(self.user_id)
 
 class TaskAssignment(HarvestItemBase):
     def __str__(self):
@@ -151,11 +151,11 @@ class Entry(HarvestItemBase):
 
     @property
     def project(self):
-        return self.harvest.project( self.project_id )
+        return self.harvest.project(self.project_id)
 
     @property
     def task(self):
-        return self.harvest.task( self.task_id )
+        return self.harvest.task(self.task_id)
 
 
 class Invoice(HarvestItemBase):
@@ -166,7 +166,7 @@ class Invoice(HarvestItemBase):
     plural_name = 'invoices'
 
     def __str__(self):
-        return 'invoice %d for client %d' % (self.id, self.client_id)
+        return 'invoice {} for client {}'.format(self.id, self.client_id)
 
     @property
     def csv_line_items(self):
@@ -175,8 +175,8 @@ class Invoice(HarvestItemBase):
 
         '''
         if not hasattr(self, '_csv_line_items'):
-            url = '%s/%s' % (self.base_url, self.id)
-            self._csv_line_items = self.harvest._get_element_values( url, self.element_name ).next().get('csv-line-items', '')
+            url = '{}/{}'.format(self.base_url, self.id)
+            self._csv_line_items = self.harvest._get_element_values(url, self.element_name).next().get('csv-line-items', '')
         return self._csv_line_items
 
     @csv_line_items.setter
@@ -191,7 +191,7 @@ class Harvest(object):
     def __init__(self, client_id, client_secret, tokens_file_name):
         self.headers = {}
         self.tokens_file_name = auth_params.get('tokens_file_name')
-        self.access_token = TokensManager.get_tokens()["access_token"]["value"]
+        self.access_token = TokensManager.get_tokens()['access_token']['value']
         self.uri = 'https://api.harvestapp.com'
         self.headers['Accept'] = 'application/xml'
         self.headers['Content-Type'] = 'application/xml'
@@ -208,36 +208,35 @@ class Harvest(object):
         flag_name = '_got_' + klass.element_name
         cache_name = '_' + klass.element_name
 
-        setattr( self, cache_name, {} )
-        setattr( self, flag_name, False )
-
-        cache = getattr( self, cache_name )
+        setattr(self, cache_name, {})
+        setattr(self, flag_name, False)
+        cache = getattr(self, cache_name)
 
         def _get_item(id):
             if id in cache:
                 return cache[id]
             else:
-                url = '%s/%d' % (klass.base_url, id)
-                item = self._get_element_values( url, klass.element_name ).next()
-                item = klass( self, item )
+                url = '{}/{}'.format(klass.base_url, id)
+                item = self._get_element_values(url, klass.element_name).next()
+                item = klass(self, item)
                 cache[id] = item
                 return item
 
-        setattr( self, klass.element_name, _get_item )
+        setattr(self, klass.element_name, _get_item)
 
         def _get_items():
-            if getattr( self, flag_name ):
+            if getattr(self, flag_name):
                 for item in cache.values():
                     yield item
             else:
-                for element in self._get_element_values( klass.base_url, klass.element_name ):
-                    item = klass( self, element )
-                    cache[ item.id ] = item
+                for element in self._get_element_values(klass.base_url, klass.element_name):
+                    item = klass(self, element)
+                    cache[item.id] = item
                     yield item
 
-                setattr( self, flag_name, True )
+                setattr(self, flag_name, True)
 
-        setattr( self, klass.plural_name, _get_items )
+        setattr(self, klass.plural_name, _get_items)
 
     def find_user(self, first_name, last_name):
         for person in self.users():
@@ -247,8 +246,7 @@ class Harvest(object):
         return None
 
     def _time_entries(self, root, start, end):
-        url = root + 'entries?from=%s&to=%s' % (start.strftime('%Y%m%d'), end.strftime('%Y%m%d'))
-
+        url = '{}entries?from={}&to={}'.format(root, start.strftime('%Y%m%d'), end.strftime('%Y%m%d'))
         for element in self._get_element_values(url, 'day-entry'):
             yield Entry(self, element)
 
@@ -277,18 +275,18 @@ class Harvest(object):
         except urllib2.URLError as e:
             raise HarvestConnectionError(e)
 
-    def _get_element_values(self,url,tagname):
+    def _get_element_values(self, url, tagname):
         def get_element(element):
             text = ''.join(n.data for n in element.childNodes if n.nodeType == n.TEXT_NODE)
             try:
                 entry_type = element.getAttribute('type')
                 if entry_type == 'integer':
                     try:
-                        return int( text )
+                        return int(text)
                     except ValueError:
                         return 0
                 elif entry_type in ('date', 'datetime', 'dateTime'):
-                    return parseDate( text )
+                    return parseDate(text)
                 elif entry_type == 'boolean':
                     try:
                         return text.strip().lower() in ('true', '1')
@@ -296,7 +294,7 @@ class Harvest(object):
                         return False
                 elif entry_type == 'decimal':
                     try:
-                        return float( text )
+                        return float(text)
                     except ValueError:
                         return 0.0
                 else:
@@ -310,7 +308,7 @@ class Harvest(object):
             for attr in entry.childNodes:
                 if attr.nodeType == attr.ELEMENT_NODE:
                     tag = attr.tagName
-                    value[tag] = get_element( attr )
+                    value[tag] = get_element(attr)
 
             if value:
                 yield value

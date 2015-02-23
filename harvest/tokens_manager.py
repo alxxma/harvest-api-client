@@ -9,9 +9,14 @@ class TokensManager(object):
     last_refresh_time_key = 'last_refresh_time'
     value_key = 'value'
     seconds_per_hours = 3600
-    client_secret = None
-    client_id = None
-    tokens_file_name = None
+    # client_secret = None
+    # client_id = None
+    # tokens_file_name = None
+
+    def __init__(self, client_id, client_secret, tokens_file_name):
+        self.client_id = client_id    
+        self.client_secret = client_secret    
+        self.tokens_file_name = tokens_file_name    
 
     @staticmethod
     def is_refresh_token_fresh():
