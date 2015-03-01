@@ -21,7 +21,6 @@ class HarvestItemGetterable(type):
         super(HarvestItemGetterable, klass).__init__(name, bases, attrs)
         instance_classes.append(klass)
 
-
 class HarvestItemBase(object):
     def __init__(self, harvest, data):
         self.harvest = harvest
@@ -31,7 +30,6 @@ class HarvestItemBase(object):
                 setattr(self, key, value)
             except AttributeError:
                 pass
-
 
 class User(HarvestItemBase):
     __metaclass__ = HarvestItemGetterable
@@ -45,7 +43,6 @@ class User(HarvestItemBase):
 
     def entries(self,start,end):
         return self.harvest._time_entries('{}/{}/'.format(self.base_url, self.id), start, end)
-
 
 class Project(HarvestItemBase):
     __metaclass__ = HarvestItemGetterable
@@ -76,7 +73,6 @@ class Project(HarvestItemBase):
         for element in self.harvest._get_element_values(url, 'user-assignment'):
             yield UserAssignment(self.harvest, element)
 
-
 class Client(HarvestItemBase):
     __metaclass__ = HarvestItemGetterable
 
@@ -98,7 +94,6 @@ class Client(HarvestItemBase):
     def __str__(self):
         return 'Client: ' + self.name
 
-
 class Contact(HarvestItemBase):
     __metaclass__ = HarvestItemGetterable
 
@@ -108,7 +103,6 @@ class Contact(HarvestItemBase):
 
     def __str__(self):
         return 'Contact: {} {}'.format(self.first_name, self.last_name)
-
 
 class Task(HarvestItemBase):
     __metaclass__ = HarvestItemGetterable
@@ -147,7 +141,8 @@ class TaskAssignment(HarvestItemBase):
 
 class Entry(HarvestItemBase):
     def __str__(self):
-        return '%0.02f hours for project %d' % (self.hours, self.project_id)
+        # return '%0.02f hours for project %d' % (self.hours, self.project_id)
+        return '{:0.2f} hours for project {}'.format(self.hours, self.project_id)
 
     @property
     def project(self):
@@ -191,11 +186,12 @@ class Harvest(object):
     def __init__(self, client_id, client_secret, tokens_file_name):
         self.headers = {}
         self.tokens_file_name = auth_params.get('tokens_file_name')
-        self.access_token = TokensManager.get_tokens()['access_token']['value']
+        self.tokensMan = TokensManager(client_id, client_secret, tokens_file_name)
+        self.access_token = self.tokensMan.load_tokens()['access_token']['value']
         self.uri = 'https://api.harvestapp.com'
         self.headers['Accept'] = 'application/xml'
         self.headers['Content-Type'] = 'application/xml'
-        self.headers['User-Agent'] = 'harvest.py'
+        self.headers['User-Agent'] = 'py-harvest.py'
         for klass in instance_classes:
             self._create_getters(klass)
 
@@ -263,8 +259,8 @@ class Harvest(object):
             # if refresh_token is fresh then the access token can be refreshed 
             # by sending a GET request to a specific url according to the spec of OAuth2
             # but if isn't fresh then an user must re-authenticate to obtain the new access and refresh tokens
-            if TokensManager.is_refresh_token_fresh():
-                TokensManager.refresh_access_token_by_demand()
+            if self.tokensMan.is_refresh_token_fresh():
+                self.tokensMan.refresh_access_token_by_demand()
             else:
                 raise HarvestError('You must re-authenticate')
               
