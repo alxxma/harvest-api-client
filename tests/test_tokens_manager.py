@@ -1,8 +1,9 @@
-import unittest
+import pytest
+def func(x):
+    return x + 1
 
-class Harvest(unittest.TestCase):
-    def test1(self):
-        self.assertEqual(1, 1)
+def test_answer():
+    assert(func(13) == 14)
 
-    def test2(self):
-        self.assertEqual(12, 12)
+def test_answer2():
+    assert(func(4) == 5)
