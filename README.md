@@ -1,4 +1,4 @@
-py-harvest
+harvest
 ================================================
 
 A library for communicating with Harvest's API supporting OAuth2 authentication.
