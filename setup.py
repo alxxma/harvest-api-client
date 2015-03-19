@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
     name='harvest_api_client',
-    version='1.0',
+    version='1.0.1',
     description='A library for working with Harvest API (getharvest.com)',
     license='MIT',
     author='Alex Maslakov',
