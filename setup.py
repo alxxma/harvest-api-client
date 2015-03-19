@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 
-from distutils.core import setup, find_packages
+from setuptools import setup, find_packages
 
 setup(
     name='harvest_api_client',
-    version='1.0.1',
+    version='1.0.2',
     description='A library for working with Harvest API (getharvest.com)',
     license='MIT',
     author='Alex Maslakov',
     author_email='me@gildedhonour.com, gilded.honour@gmail.com',
     url='https://www.github.com/harvest-api-client',
     packages=['harvest_api_client'],
-    package_data={'': ['LICENSE.txt', 'MANIFEST', 'MANIFEST.IN', 'README.md']}
+    package_data={'': ['LICENSE.txt', 'MANIFEST', 'MANIFEST.IN', 'README.md']},
     include_package_data=True,
     long_description=open('README.md').read(),
     keywords = ['harvest-api', 'api', 'harvest-com', 'getharvest.com'], 
