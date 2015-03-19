@@ -1,4 +1,4 @@
-harvest
+harvest-api
 ================================================
 
 A library for communicating with Harvest's API supporting OAuth2 authentication.
