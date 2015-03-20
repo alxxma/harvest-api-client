@@ -1,4 +1,4 @@
-harvest-api
+harvest_api_client
 ================================================
 
 A library for communicating with Harvest's API supporting OAuth2 authentication.
@@ -9,3 +9,9 @@ It's inspired by https://github.com/lann/Harvest, but has some distinctions:
   * Has tests coverage
 
 It doesn't support basic authentication.
+
+**How to install**
+
+.. code:: python
+
+  pip install harvest_api_client
