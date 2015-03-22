@@ -9,6 +9,19 @@ A client for the Harvest API (getharvest.com) supporting OAuth2 authentication. 
 
 It doesn't support the basic authentication.
 
-**How to install**
+How to install
+-----
 
     $ pip install harvest_api_client
+
+
+Source
+-----
+
+The source is here https://github.com/GildedHonour/harvest-api-client
+
+
+License
+-----
+
+The MIT License (MIT)
