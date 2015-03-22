@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='harvest_api_client',
-    version='1.0.6',
+    version='1.0.7',
     description='A client for the Harvest API (getharvest.com)',
     license='MIT',
     author='Alex Maslakov',
