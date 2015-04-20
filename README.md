@@ -1,7 +1,7 @@
 Harvest API client
-================================================
+===================================
 
-A client for the Harvest API (getharvest.com) supporting OAuth2 authentication. It's inspired by https://github.com/lann/Harvest, but has some distinctions:
+A Python library for Harvest's API (getharvest.com) which supports OAuth2 authentication. It's inspired by https://github.com/lann/Harvest and has some distinctions:
 
   * Supports Python 3x
   * Supports Oauth2
@@ -18,7 +18,8 @@ How to install
 Source
 -----
 
-The source is here https://github.com/GildedHonour/harvest-api-client
+The source is available here
+- https://github.com/GildedHonour/harvest-api-client
 
 
 License

@@ -2,16 +2,19 @@
 
 from setuptools import setup, find_packages
 
+with open('README.md') as f:
+    long_description = f.read()
+
 setup(
     name='harvest_api_client',
-    version='1.0.7',
+    version='1.0.9',
     description='A client for the Harvest API (getharvest.com)',
     license='MIT',
     author='Alex Maslakov',
     author_email='Alex Maslakov<me@gildedhonour.com>, Alex Maslakov<gilded.honour@gmail.com>',
     url='https://github.com/GildedHonour/harvest-api-client',
     packages=['harvest_api_client'],
-    long_description=open('README.md').read(),
+    long_description=long_description,
     keywords = ['harvest-api', 'api', 'harvest-com', 'getharvest.com'], 
     classifiers = [
         'Development Status :: 4 - Beta',

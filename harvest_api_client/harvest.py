@@ -1,11 +1,10 @@
 import requests
-import urllib2
+from urllib.request import urlopen
 from base64 import b64encode
 from dateutil.parser import parse as parseDate
 from xml.dom.minidom import parseString
 import json
 import datetime
-from dateutil import parser
 import os, sys
 from tokens_manager import TokensManager
 
@@ -185,9 +184,9 @@ class Invoice(HarvestItemBase):
 class Harvest(object):
     def __init__(self, client_id, client_secret, tokens_file_name):
         self.headers = {}
-        self.tokens_file_name = auth_params.get('tokens_file_name')
-        self.tokensMan = TokensManager(client_id, client_secret, tokens_file_name)
-        self.access_token = self.tokensMan.load_tokens()['access_token']['value']
+        self.tokens_file_name = tokens_file_name
+        self.tokens_man = TokensManager(client_id, client_secret, tokens_file_name)
+        self.access_token = self.tokens_man.load_tokens()['access_token']['value']
         self.uri = 'https://api.harvestapp.com'
         self.headers['Accept'] = 'application/xml'
         self.headers['Content-Type'] = 'application/xml'
@@ -254,21 +253,21 @@ class Harvest(object):
             separator = '?'
 
         full_url +='{}access_token={}'.format(separator, self.access_token)
-        request = urllib2.Request(url=full_url, headers=self.headers)
+        request = urllib.request.Request(url=full_url, headers=self.headers)
         try:
             # if refresh_token is fresh then the access token can be refreshed 
             # by sending a GET request to a specific url according to the spec of OAuth2
             # but if isn't fresh then an user must re-authenticate to obtain the new access and refresh tokens
-            if self.tokensMan.is_refresh_token_fresh():
-                self.tokensMan.refresh_access_token_by_demand()
+            if self.tokens_man.is_refresh_token_fresh():
+                self.tokens_man.refresh_access_token_by_demand()
             else:
                 raise HarvestError('You must re-authenticate')
               
-            r = urllib2.urlopen(request)
+            r = urllib.request.urlopen(request)
             xml = r.read()
             return parseString(xml)
         
-        except urllib2.URLError as e:
+        except urllib.error.URLError as e:
             raise HarvestConnectionError(e)
 
     def _get_element_values(self, url, tagname):

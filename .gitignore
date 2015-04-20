@@ -55,3 +55,7 @@ target/
 doc
 
 .pypirc
+tests/test1.py
+tests/*.json
+harvest_api_client.egg-info
+.DS_Store
