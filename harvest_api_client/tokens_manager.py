@@ -2,6 +2,7 @@ import requests
 import json
 import datetime
 from dateutil import parser
+import os.path
 
 class TokensManager(object):
     access_token_refresh_time = 18    #in hours
@@ -13,9 +14,10 @@ class TokensManager(object):
     def __init__(self, client_id, client_secret, tokens_file_name):
         self.client_id = client_id    
         self.client_secret = client_secret
-
-        # todo - check if file exists
-        self.tokens_file_name = tokens_file_name  
+        if not os.path.isfile(tokens_file_name):
+            raise OSError('Tokens file "{}" not found.'.format(tokens_file_name))
+        
+        self.tokens_file_name = tokens_file_name
 
     def is_refresh_token_fresh(self):
         tokens = self.load_tokens()
