@@ -14,10 +14,12 @@ class TokensManager(object):
     def __init__(self, client_id, client_secret, tokens_file_name):
         self.client_id = client_id    
         self.client_secret = client_secret
-        if not os.path.isfile(tokens_file_name):
+
+        # import pdb; pdb.set_trace()
+
+        self.tokens_file_name = os.path.join(os.path.dirname(os.path.realpath(__file__)), tokens_file_name)
+        if not os.path.isfile(self.tokens_file_name):
             raise OSError('Tokens file "{}" not found.'.format(tokens_file_name))
-        
-        self.tokens_file_name = tokens_file_name
 
     def is_refresh_token_fresh(self):
         tokens = self.load_tokens()

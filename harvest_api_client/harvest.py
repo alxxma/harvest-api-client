@@ -1,5 +1,5 @@
 import requests
-from urllib.request import urlopen
+import urllib.request
 from base64 import b64encode
 from dateutil.parser import parse as parseDate
 from xml.dom.minidom import parseString
@@ -17,7 +17,8 @@ class HarvestConnectionError(HarvestError):
 instance_classes = []
 class HarvestItemGetterable(type):
     def __init__(klass, name, bases, attrs):
-        super(HarvestItemGetterable, klass).__init__(name, bases, attrs)
+        # super(HarvestItemGetterable, klass).__init__(name, bases, attrs)
+        super().__init__(name, bases, attrs)
         instance_classes.append(klass)
 
 class HarvestItemBase(object):
@@ -30,9 +31,8 @@ class HarvestItemBase(object):
             except AttributeError:
                 pass
 
-class User(HarvestItemBase):
-    __metaclass__ = HarvestItemGetterable
-
+# class User(HarvestItemBase):
+class User(HarvestItemBase, metaclass=HarvestItemGetterable):
     base_url = '/people'
     element_name = 'user'
     plural_name = 'users'
@@ -43,9 +43,7 @@ class User(HarvestItemBase):
     def entries(self,start,end):
         return self.harvest._time_entries('{}/{}/'.format(self.base_url, self.id), start, end)
 
-class Project(HarvestItemBase):
-    __metaclass__ = HarvestItemGetterable
-
+class Project(HarvestItemBase, metaclass=HarvestItemGetterable):
     base_url = '/projects'
     element_name = 'project'
     plural_name = 'projects'
@@ -72,9 +70,7 @@ class Project(HarvestItemBase):
         for element in self.harvest._get_element_values(url, 'user-assignment'):
             yield UserAssignment(self.harvest, element)
 
-class Client(HarvestItemBase):
-    __metaclass__ = HarvestItemGetterable
-
+class Client(HarvestItemBase, metaclass=HarvestItemGetterable):
     base_url = '/clients'
     element_name = 'client'
     plural_name = 'clients'
@@ -93,9 +89,7 @@ class Client(HarvestItemBase):
     def __str__(self):
         return 'Client: ' + self.name
 
-class Contact(HarvestItemBase):
-    __metaclass__ = HarvestItemGetterable
-
+class Contact(HarvestItemBase, metaclass=HarvestItemGetterable):
     base_url = '/contacts'
     element_name = 'contact'
     plural_name = 'contacts'
@@ -103,9 +97,7 @@ class Contact(HarvestItemBase):
     def __str__(self):
         return 'Contact: {} {}'.format(self.first_name, self.last_name)
 
-class Task(HarvestItemBase):
-    __metaclass__ = HarvestItemGetterable
-
+class Task(HarvestItemBase, metaclass=HarvestItemGetterable):
     base_url = '/tasks'
     element_name = 'task'
     plural_name = 'tasks'
@@ -152,9 +144,7 @@ class Entry(HarvestItemBase):
         return self.harvest.task(self.task_id)
 
 
-class Invoice(HarvestItemBase):
-    __metaclass__ = HarvestItemGetterable
-
+class Invoice(HarvestItemBase, metaclass=HarvestItemGetterable):
     base_url = '/invoices'
     element_name = 'invoice'
     plural_name = 'invoices'
@@ -191,6 +181,10 @@ class Harvest(object):
         self.headers['Accept'] = 'application/xml'
         self.headers['Content-Type'] = 'application/xml'
         self.headers['User-Agent'] = 'py-harvest.py'
+
+        import pdb; pdb.set_trace()
+
+
         for klass in instance_classes:
             self._create_getters(klass)
 
@@ -202,7 +196,6 @@ class Harvest(object):
         '''
         flag_name = '_got_' + klass.element_name
         cache_name = '_' + klass.element_name
-
         setattr(self, cache_name, {})
         setattr(self, flag_name, False)
         cache = getattr(self, cache_name)

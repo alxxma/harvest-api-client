@@ -56,6 +56,8 @@ doc
 
 .pypirc
 tests/test1.py
+tests/test2.py
 tests/*.json
+harvest_api_client/tokens.json
 harvest_api_client.egg-info
 .DS_Store
