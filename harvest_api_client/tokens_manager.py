@@ -14,9 +14,6 @@ class TokensManager(object):
     def __init__(self, client_id, client_secret, tokens_file_name):
         self.client_id = client_id    
         self.client_secret = client_secret
-
-        # import pdb; pdb.set_trace()
-
         self.tokens_file_name = os.path.join(os.path.dirname(os.path.realpath(__file__)), tokens_file_name)
         if not os.path.isfile(self.tokens_file_name):
             raise OSError('Tokens file "{}" not found.'.format(tokens_file_name))
@@ -66,14 +63,12 @@ class TokensManager(object):
         resp = requests.post('https://api.harvestapp.com/oauth2/token', headers=headers, data=body, verify=False)
         return json.loads(resp.content)
 
-    # @staticmethod
     def load_tokens(self):
         with open(self.tokens_file_name) as json_file:
             res = json.load(json_file)
 
         return res
 
-    # @staticmethod
     def write_tokens(self, data):
         with open(self.tokens_file_name, 'w') as json_file:
             json.dump(data, json_file)

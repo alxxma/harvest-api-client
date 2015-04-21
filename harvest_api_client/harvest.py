@@ -181,10 +181,6 @@ class Harvest(object):
         self.headers['Accept'] = 'application/xml'
         self.headers['Content-Type'] = 'application/xml'
         self.headers['User-Agent'] = 'py-harvest.py'
-
-        import pdb; pdb.set_trace()
-
-
         for klass in instance_classes:
             self._create_getters(klass)
 
