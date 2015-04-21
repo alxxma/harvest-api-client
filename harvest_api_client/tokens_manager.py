@@ -36,7 +36,6 @@ class TokensManager(object):
         res = last_rd_diff.total_seconds() / self.seconds_per_hour
         return res < self.access_token_refresh_time
 
-    # @staticmethod
     def refresh_access_token(self):
         json_data = self._refresh_access_token_impl()
         old_json_file_data = self.load_tokens()
@@ -61,7 +60,7 @@ class TokensManager(object):
         )
         headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'}
         resp = requests.post('https://api.harvestapp.com/oauth2/token', headers=headers, data=body, verify=False)
-        return json.loads(resp.content)
+        return json.loads(resp.content.decode())
 
     def load_tokens(self):
         with open(self.tokens_file_name) as json_file:

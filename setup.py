@@ -7,7 +7,7 @@ with open('README.md') as f:
 
 setup(
     name='harvest_api_client',
-    version='1.0.12',
+    version='1.0.13',
     description='A client for the Harvest API (getharvest.com)',
     license='MIT',
     author='Alex Maslakov',
@@ -15,7 +15,7 @@ setup(
     url='https://github.com/GildedHonour/harvest-api-client',
     packages=['harvest_api_client'],
     long_description=long_description,
-    keywords = ['harvest-api', 'api', 'harvest-com', 'getharvest.com'], 
+    keywords = ['harvest-api', 'api', 'harvest.com', 'getharvest.com', 'harvest', 'api client'],
     classifiers = [
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
