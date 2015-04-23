@@ -6,7 +6,8 @@ from xml.dom.minidom import parseString
 import json
 import datetime
 import os, sys
-from tokens_manager import TokensManager
+
+from .tokens_manager import TokensManager
 
 class HarvestError(Exception):
     pass
