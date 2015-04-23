@@ -14,7 +14,7 @@ class TokensManager(object):
     def __init__(self, client_id, client_secret, tokens_file_name):
         self.client_id = client_id    
         self.client_secret = client_secret
-        self.tokens_file_name = os.path.join(os.path.dirname(__file__), tokens_file_name)
+        self.tokens_file_name = os.path.abspath(tokens_file_name)
         if not os.path.isfile(self.tokens_file_name):
             raise OSError('Tokens file "{}" not found.'.format(tokens_file_name))
 
