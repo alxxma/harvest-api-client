@@ -34,7 +34,7 @@ How to use it
 ```
 **And you're ready to go:**
 
-```ruby
+```python
 from datetime import datetime, timedelta
 from harvest_api_client import Harvest
 
