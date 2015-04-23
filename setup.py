@@ -17,7 +17,7 @@ setup(
     long_description=long_description,
     keywords = ['harvest-api', 'api', 'harvest.com', 'getharvest.com', 'harvest', 'api client'],
     classifiers = [
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Libraries',
         'Topic :: Internet :: WWW/HTTP :: Site Management',
