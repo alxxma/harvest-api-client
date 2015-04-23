@@ -13,7 +13,7 @@ How to install
 -----
 
 ```
-$ pip install harvest_api_client
+$ pip3 install harvest_api_client
 ```
 
 How to use it
