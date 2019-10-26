@@ -245,18 +245,18 @@ class Harvest(object):
         full_url +='{}access_token={}'.format(separator, self.access_token)
         request = urllib.request.Request(url=full_url, headers=self.headers)
         try:
-            # if refresh_token is fresh then the access token can be refreshed 
+            # if refresh_token is fresh then the access token can be refreshed
             # by sending a GET request to a specific url according to the spec of OAuth2
             # but if isn't fresh then an user must re-authenticate to obtain the new access and refresh tokens
             if self.tokens_man.is_refresh_token_fresh():
                 self.tokens_man.refresh_access_token_by_demand()
             else:
                 raise HarvestError('You must re-authenticate')
-              
+
             r = urllib.request.urlopen(request)
             xml = r.read()
             return parseString(xml)
-        
+
         except urllib.error.URLError as e:
             raise HarvestConnectionError(e)
 

@@ -12,7 +12,7 @@ class TokensManager(object):
     seconds_per_hour = 3600
 
     def __init__(self, client_id, client_secret, tokens_file_name):
-        self.client_id = client_id    
+        self.client_id = client_id
         self.client_secret = client_secret
         self.tokens_file_name = os.path.abspath(tokens_file_name)
         if not os.path.isfile(self.tokens_file_name):
@@ -27,7 +27,7 @@ class TokensManager(object):
 
     def refresh_access_token_by_demand(self):
         if not (self.is_access_token_fresh()):
-            self.refresh_access_token() 
+            self.refresh_access_token()
 
     def is_access_token_fresh(self):
         tokens = self.load_tokens()
@@ -51,13 +51,13 @@ class TokensManager(object):
         })
 
         print('\nThe access token has been refreshed.\n')
-  
+
     def _refresh_access_token_impl(self):
         tokens = self.load_tokens()
         body = 'refresh_token={refresh_token}&client_id={client_id}&client_secret={client_secret}&grant_type=refresh_token'.format(
-            refresh_token=tokens['refresh_token'][self.value_key], client_id=self.client_id, 
-            client_secret=self.client_secret
-        )
+                refresh_token=tokens['refresh_token'][self.value_key], client_id=self.client_id,
+                client_secret=self.client_secret
+                )
         headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'}
         resp = requests.post('https://api.harvestapp.com/oauth2/token', headers=headers, data=body, verify=False)
         return json.loads(resp.content.decode())
